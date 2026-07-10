@@ -1,5 +1,11 @@
 # PR Response Doc — CineLog Watchlist Feature
 
+## AI Usage
+
+I used AI to review my implementation approach, verify that my commit messages followed the Conventional Commits format, and refine the wording of my responses in `pr-response.md`. I also used AI to review my final work against the project guidelines and grading rubric to confirm that all required review comments, documentation, and Git history requirements were addressed.
+
+I read the codebase myself before implementing the requested changes and used AI as a verification and writing aid rather than as a replacement for understanding the implementation.
+
 ## Comment 1 – Rename
 
 **What I did:**
@@ -11,7 +17,7 @@ I performed a project-wide search for `save_to_watchlist` to identify every call
 ## Comment 2 – Deduplication
 
 **What I did:**
-Added a deduplication check to `add_to_watchlist()` so that a user cannot add the same film to their watchlist more than once. Before creating a new `WatchlistEntry`, the service checks whether an entry already exists for the same `user_id` and `film_id`. If a duplicate is found, the appropriate exception is raised instead of creating another entry.
+Added a deduplication check to `add_to_watchlist()` so that a user cannot add the same film to their watchlist more than once. Before creating a new `WatchlistEntry`, the service checks whether an entry already exists for the same `user_id` and `film_id`. If a duplicate is found, the function raises an exception instead of creating a second watchlist entry.
 
 **How I verified:**
 I followed the existing deduplication pattern used in `add_to_collection()` within `services/collection_service.py` to keep the implementation consistent with the rest of the codebase. After implementing the check, I ran the test suite to verify that the existing functionality continued to work and that duplicate watchlist entries are prevented.
@@ -56,3 +62,30 @@ I merged the `.gitignore` changes, completed the rebase, restored the `Watchlist
 
 **How I verified no conflict remains:**
 I confirmed the rebase completed successfully with a linear commit history and no merge commits. I then ran `pytest tests/test_watchlist.py -v` and `pytest tests/ -v` to verify that all tests passed after the rebase.
+
+## Git Commit History
+
+The following `git log --oneline` screenshot shows the final rewritten commit history with conventional commit messages and no merge commits.
+
+![Git Commit History](images/git_log_oneline.png)
+
+## PR Description
+
+### Summary
+
+This PR completes the watchlist feature for CineLog by aligning it with the project's naming conventions, preventing duplicate watchlist entries, adding test coverage for invalid film IDs, and updating the feature after rebasing onto the latest `main` branch. The implementation now follows the existing collection service patterns and project conventions.
+
+### Design Decisions
+
+- **Default visibility:** Kept `public=True` as the default because CineLog is a community-focused platform where users commonly share watchlists. This reduces friction while still allowing visibility to be changed later.
+
+- **Sort order:** I recommend sorting by `date_added` so recently saved films appear first. This better matches how users typically revisit and manage a watchlist.
+
+### Manual Testing
+
+1. Start the application using `python app.py`.
+2. Add a valid film to a user's watchlist using the watchlist endpoint.
+3. Verify the watchlist entry is created successfully.
+4. Attempt to add the same film again and confirm that no duplicate watchlist entry is created and the duplicate check is triggered.
+5. Attempt to add a nonexistent `film_id` and confirm `FilmNotFoundError` is raised.
+6. Run `pytest tests/ -v` and verify all tests pass.
