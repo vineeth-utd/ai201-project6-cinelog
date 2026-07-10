@@ -45,3 +45,14 @@ Your point about users wanting to see what they added recently makes sense to me
 
 **Engagement with reviewer's point:**
 Alphabetical order is still nice for scanning a stable reference list, and I can see why that would feel tidy. But for this feature, I think recency is the more important signal because the watchlist is meant to support active decision making, not just storage. So I would prioritize date-added order here, while keeping alphabetical sorting as a possible future option if CineLog later adds a separate browse or search view.
+
+## Comment 6 – Rebase
+
+**What conflicted:**
+During the rebase onto `origin/main`, Git reported a conflict in `.gitignore` because both branches had added the file independently. After the rebase completed, I also found that the watchlist feature no longer had the `WatchlistEntry` model after incorporating the updated `models.py` from `main`, which caused the watchlist tests to fail.
+
+**How I resolved it:**
+I merged the `.gitignore` changes, completed the rebase, restored the `WatchlistEntry` model using the UUID-based schema to match the refactored codebase, and updated the remaining watchlist documentation and docstrings to reference UUID film IDs instead of integers.
+
+**How I verified no conflict remains:**
+I confirmed the rebase completed successfully with a linear commit history and no merge commits. I then ran `pytest tests/test_watchlist.py -v` and `pytest tests/ -v` to verify that all tests passed after the rebase.
