@@ -23,3 +23,25 @@ Created a new file, `tests/test_watchlist.py`, and added a test to verify that `
 
 **How I verified:**
 I modeled the test after `test_add_to_collection_nonexistent_film_raises()` in `tests/test_collection.py` so it follows the existing fixture setup, assertion pattern, and testing style used throughout the project. I ran `pytest tests/test_watchlist.py -v` and confirmed the expected `FilmNotFoundError` was raised. I then ran the full test suite (`pytest tests/ -v`) to verify the new test did not affect any existing functionality.
+
+## Comment 4 – Default Visibility
+
+**My position:**
+I would keep `public=True` as the default for watchlist entries.
+
+**Reasoning:**
+I understand the concern around choosing a default visibility, but I think keeping `public=True` fits CineLog's community-focused experience. Since users often use watchlists to share films they plan to watch or to discover recommendations from others, a public default makes that behavior available without adding an extra step each time a film is saved. My goal was to optimize for a simple watchlist workflow while aligning with the social nature of the platform.
+
+**Tradeoff acknowledged:**
+I agree that a private default would better protect users who expect new watchlist entries to remain hidden until they explicitly share them. That approach prioritizes privacy and avoids accidental visibility. I still lean toward a public default because it reduces friction for the common sharing use case, but I think either approach can work as long as the platform provides an easy way for users to change the visibility of their watchlist entries.
+
+## Comment 5 – Sort Order
+
+**My position:**
+I agree with sorting the watchlist by `date_added` instead of keeping it alphabetical.
+
+**Reasoning:**
+Your point about users wanting to see what they added recently makes sense to me. In CineLog, the watchlist behaves more like a personal queue than a catalog, so the most useful order is usually the one that surfaces the newest additions first. That makes the list match the way people actually use it: they save something and then come back later to decide what to watch next. Sorting by `date_added` also helps the watchlist feel current without requiring users to remember when they added each title.
+
+**Engagement with reviewer's point:**
+Alphabetical order is still nice for scanning a stable reference list, and I can see why that would feel tidy. But for this feature, I think recency is the more important signal because the watchlist is meant to support active decision making, not just storage. So I would prioritize date-added order here, while keeping alphabetical sorting as a possible future option if CineLog later adds a separate browse or search view.
