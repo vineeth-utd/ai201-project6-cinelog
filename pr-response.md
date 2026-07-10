@@ -15,3 +15,11 @@ Added a deduplication check to `add_to_watchlist()` so that a user cannot add th
 
 **How I verified:**
 I followed the existing deduplication pattern used in `add_to_collection()` within `services/collection_service.py` to keep the implementation consistent with the rest of the codebase. After implementing the check, I ran the test suite to verify that the existing functionality continued to work and that duplicate watchlist entries are prevented.
+
+## Comment 3 – Missing Test
+
+**What I did:**
+Created a new file, `tests/test_watchlist.py`, and added a test to verify that `add_to_watchlist()` raises `FilmNotFoundError` when a nonexistent `film_id` is provided. This ensures invalid film IDs are handled gracefully instead of creating an invalid watchlist entry or causing a database integrity error.
+
+**How I verified:**
+I modeled the test after `test_add_to_collection_nonexistent_film_raises()` in `tests/test_collection.py` so it follows the existing fixture setup, assertion pattern, and testing style used throughout the project. I ran `pytest tests/test_watchlist.py -v` and confirmed the expected `FilmNotFoundError` was raised. I then ran the full test suite (`pytest tests/ -v`) to verify the new test did not affect any existing functionality.
