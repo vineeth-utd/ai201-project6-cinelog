@@ -81,7 +81,7 @@ I added tests to confirm that an existing watchlist entry can be removed success
 
 ## Git Commit History
 
-The following `git log --oneline` screenshot shows the final rewritten commit history with conventional commit messages and no merge commits.
+The following `git log --oneline origin/main..HEAD` screenshot shows the final commit history for my feature branch with conventional commit messages and no merge commits.
 
 ![Git Commit History](images/git_log_oneline.png)
 
