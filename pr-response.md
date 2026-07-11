@@ -63,6 +63,14 @@ I merged the `.gitignore` changes, completed the rebase, restored the `Watchlist
 **How I verified no conflict remains:**
 I confirmed the rebase completed successfully with a linear commit history and no merge commits. I then ran `pytest tests/test_watchlist.py -v` and `pytest tests/ -v` to verify that all tests passed after the rebase.
 
+## Stretch Feature - Second Test
+
+**What I did:**
+Added a second watchlist test to verify that adding the same film twice raises the duplicate-entry exception and does not create a second `WatchlistEntry`.
+
+**How I verified:**
+I followed the same pattern as the existing collection deduplication test, then ran `pytest tests/test_watchlist.py -v` and `pytest tests/ -v` to confirm the new test passes.
+
 ## Git Commit History
 
 The following `git log --oneline` screenshot shows the final rewritten commit history with conventional commit messages and no merge commits.
