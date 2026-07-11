@@ -1,7 +1,7 @@
 import pytest
 from app import create_app, db
 from models import User, Film, WatchlistEntry
-from services.watchlist_service import add_to_watchlist
+from services.watchlist_service import add_to_watchlist, remove_from_watchlist
 from services.collection_service import FilmNotFoundError, AlreadyInCollectionError
 
 def test_add_to_watchlist_nonexistent_film_raises(app, sample_user):
@@ -30,6 +30,21 @@ def test_add_to_watchlist_duplicate_raises(app, sample_user, sample_film):
             user_id=sample_user, film_id=sample_film
         ).count()
         assert count == 1
+
+def test_remove_from_watchlist_deletes_entry(app, sample_user, sample_film):
+    """
+    Removing an existing watchlist entry should delete it from the database.
+    """
+    with app.app_context():
+        add_to_watchlist(user_id=sample_user, film_id=sample_film)
+
+        removed = remove_from_watchlist(user_id=sample_user, film_id=sample_film)
+        assert removed is True
+
+        count = WatchlistEntry.query.filter_by(
+            user_id=sample_user, film_id=sample_film
+        ).count()
+        assert count == 0
 
 @pytest.fixture
 def app():

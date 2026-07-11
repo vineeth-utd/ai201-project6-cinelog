@@ -71,6 +71,14 @@ Added a second watchlist test to verify that adding the same film twice raises t
 **How I verified:**
 I followed the same pattern as the existing collection deduplication test, then ran `pytest tests/test_watchlist.py -v` and `pytest tests/ -v` to confirm the new test passes.
 
+## Stretch Feature – remove_from_watchlist()
+
+**What I implemented:**
+Added `remove_from_watchlist(user_id, film_id)` in `services/watchlist_service.py` and a corresponding DELETE endpoint at `/watchlist/<user_id>/remove`. The service removes an existing watchlist entry and raises `NotInWatchlistError` when the film is not currently on the watchlist.
+
+**How I verified:**
+I added tests to confirm that an existing watchlist entry can be removed successfully and that attempting to remove a missing entry raises the expected error. I ran `pytest tests/test_watchlist.py -v` and `pytest tests/ -v` to confirm the feature works without breaking existing tests.
+
 ## Git Commit History
 
 The following `git log --oneline` screenshot shows the final rewritten commit history with conventional commit messages and no merge commits.
@@ -81,7 +89,7 @@ The following `git log --oneline` screenshot shows the final rewritten commit hi
 
 ### Summary
 
-This PR completes the watchlist feature for CineLog by aligning it with the project's naming conventions, preventing duplicate watchlist entries, adding test coverage for invalid film IDs, and updating the feature after rebasing onto the latest `main` branch. The implementation now follows the existing collection service patterns and project conventions.
+This PR completes the watchlist feature for CineLog by aligning it with the project's naming conventions, preventing duplicate watchlist entries, adding test coverage for invalid film IDs, implementing watchlist removal, and updating the feature after rebasing onto the latest `main` branch. The implementation follows the existing collection service patterns and project conventions.
 
 ### Design Decisions
 
@@ -97,3 +105,5 @@ This PR completes the watchlist feature for CineLog by aligning it with the proj
 4. Attempt to add the same film again and confirm that no duplicate watchlist entry is created and the duplicate check is triggered.
 5. Attempt to add a nonexistent `film_id` and confirm `FilmNotFoundError` is raised.
 6. Run `pytest tests/ -v` and verify all tests pass.
+7. Remove an existing film from the watchlist using the `DELETE /watchlist/<user_id>/remove` endpoint and verify it is removed successfully.
+8. Attempt to remove a film that is not present in the watchlist and verify the appropriate error is returned.
